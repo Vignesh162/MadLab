@@ -1,0 +1,104 @@
+Here's a **Flutter app** that displays a **scrollable list of songs** (8–9 entries) with song image, name, singer, and category, as per your diagram.
+
+---
+
+### ✅ `main.dart`
+
+```dart
+import 'package:flutter/material.dart';
+
+void main() => runApp(SongListApp());
+
+class SongListApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Song List',
+      home: SongListPage(),
+      debugShowCheckedModeBanner: false,
+    );
+  }
+}
+
+class Song {
+  final String name;
+  final String singer;
+  final String category;
+  final String image;
+
+  Song(this.name, this.singer, this.category, this.image);
+}
+
+class SongListPage extends StatelessWidget {
+  final List<Song> songs = [
+    Song("Shine Bright", "Ariana Glow", "Pop", "assets/song1.jpg"),
+    Song("Rocking Thunder", "Electric Zed", "Rock", "assets/song2.jpg"),
+    Song("Soul Calm", "Peaceful Mind", "Jazz", "assets/song3.jpg"),
+    Song("Dance Machine", "Beat Up", "EDM", "assets/song4.jpg"),
+    Song("Love Tune", "Melody Love", "Romantic", "assets/song5.jpg"),
+    Song("Classical Dream", "Symphony X", "Classical", "assets/song6.jpg"),
+    Song("Rap Time", "MC Speed", "Hip-Hop", "assets/song7.jpg"),
+    Song("Nature Whisper", "Zen Flow", "Instrumental", "assets/song8.jpg"),
+    Song("Bollywood Vibes", "Neha S.", "Bollywood", "assets/song9.jpg"),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("Song List")),
+      body: ListView.builder(
+        itemCount: songs.length,
+        itemBuilder: (context, index) {
+          final song = songs[index];
+          return Card(
+            margin: EdgeInsets.all(10),
+            child: ListTile(
+              leading: Image.asset(song.image, width: 60, height: 60, fit: BoxFit.cover),
+              title: Text(song.name),
+              subtitle: Text("Singer: ${song.singer}\nCategory: ${song.category}"),
+              isThreeLine: true,
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+```
+
+---
+
+### 🖼️ Add Song Images
+
+Create a folder `assets/` and add `song1.jpg` through `song9.jpg` inside it.
+
+---
+
+### 🔧 `pubspec.yaml` (Add asset paths)
+
+```yaml
+flutter:
+  assets:
+    - assets/song1.jpg
+    - assets/song2.jpg
+    - assets/song3.jpg
+    - assets/song4.jpg
+    - assets/song5.jpg
+    - assets/song6.jpg
+    - assets/song7.jpg
+    - assets/song8.jpg
+    - assets/song9.jpg
+```
+
+---
+
+### 🚀 Run the App
+
+1. Place 9 images in the `assets/` folder.
+2. Run:
+   ```bash
+   flutter pub get
+   flutter run
+   ```
+
+Would you like me to generate placeholder song images for the `assets/` folder?

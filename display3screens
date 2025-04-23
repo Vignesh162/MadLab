@@ -1,0 +1,134 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(StudentApp());
+}
+
+class StudentApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Student Info App',
+      theme: ThemeData(primarySwatch: Colors.teal),
+      home: FirstScreen(),
+    );
+  }
+}
+
+class StudentData {
+  String name = '';
+  String mobile = '';
+  String address = '';
+  String city = '';
+}
+
+class FirstScreen extends StatefulWidget {
+  @override
+  _FirstScreenState createState() => _FirstScreenState();
+}
+
+class _FirstScreenState extends State<FirstScreen> {
+  final _nameController = TextEditingController();
+  final _mobileController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("Step 1: Basic Info")),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            TextField(controller: _nameController, decoration: InputDecoration(labelText: "Name")),
+            TextField(controller: _mobileController, decoration: InputDecoration(labelText: "Mobile"), keyboardType: TextInputType.phone),
+            SizedBox(height: 20),
+            ElevatedButton(
+              child: Text("Next"),
+              onPressed: () {
+                StudentData data = StudentData();
+                data.name = _nameController.text;
+                data.mobile = _mobileController.text;
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SecondScreen(data: data)),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class SecondScreen extends StatefulWidget {
+  final StudentData data;
+  SecondScreen({required this.data});
+
+  @override
+  _SecondScreenState createState() => _SecondScreenState();
+}
+
+class _SecondScreenState extends State<SecondScreen> {
+  final _addressController = TextEditingController();
+  final _cityController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("Step 2: Address")),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            TextField(controller: _addressController, decoration: InputDecoration(labelText: "Address")),
+            TextField(controller: _cityController, decoration: InputDecoration(labelText: "City")),
+            SizedBox(height: 20),
+            ElevatedButton(
+              child: Text("Next"),
+              onPressed: () {
+                widget.data.address = _addressController.text;
+                widget.data.city = _cityController.text;
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SummaryScreen(data: widget.data)),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class SummaryScreen extends StatelessWidget {
+  final StudentData data;
+  SummaryScreen({required this.data});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("Step 3: Summary")),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text("Name: ${data.name}", style: TextStyle(fontSize: 18)),
+            Text("Mobile: ${data.mobile}", style: TextStyle(fontSize: 18)),
+            Text("Address: ${data.address}", style: TextStyle(fontSize: 18)),
+            Text("City: ${data.city}", style: TextStyle(fontSize: 18)),
+            SizedBox(height: 20),
+            ElevatedButton(
+              child: Text("Back to Start"),
+              onPressed: () {
+                Navigator.popUntil(context, (route) => route.isFirst);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

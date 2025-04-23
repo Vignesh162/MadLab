@@ -1,0 +1,14 @@
+void main() {
+  String sentence = "Flutter makes it easy and fast to build beautiful apps for mobile and beyond.";
+
+  print("Sentence: $sentence");
+  print("Characters: ${countCharacters(sentence)}");
+  print("Words: ${countWords(sentence)}");
+  print("Reversed: ${reverseSentence(sentence)}");
+}
+
+int countCharacters(String text) => text.length;
+
+int countWords(String text) => text.trim().split(RegExp(r'\s+')).length;
+
+String reverseSentence(String text) => text.split('').reversed.join();

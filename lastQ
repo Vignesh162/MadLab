@@ -1,0 +1,184 @@
+Here is the complete Flutter code for the app described in your image. It features:
+
+- A **form screen** for input (Name, Gender, DOB, Address, City, Pincode)
+- A **second screen** showing submitted details
+- **City dropdown**
+- **Navigation with back button**
+
+---
+
+### ✅ `main.dart`
+
+```dart
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(ContactApp());
+}
+
+class ContactApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Contact Details App',
+      theme: ThemeData(primarySwatch: Colors.blue),
+      home: ContactFormScreen(),
+    );
+  }
+}
+
+class ContactFormScreen extends StatefulWidget {
+  @override
+  _ContactFormScreenState createState() => _ContactFormScreenState();
+}
+
+class _ContactFormScreenState extends State<ContactFormScreen> {
+  final _formKey = GlobalKey<FormState>();
+
+  String name = '';
+  String gender = 'Male';
+  DateTime? dob;
+  String address = '';
+  String city = 'New York';
+  String pinCode = '';
+
+  List<String> cities = ['New York', 'London', 'Mumbai', 'Tokyo'];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("Contact Details")),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Form(
+          key: _formKey,
+          child: ListView(
+            children: [
+              TextFormField(
+                decoration: InputDecoration(labelText: "Name"),
+                onSaved: (val) => name = val ?? '',
+              ),
+              Row(
+                children: [
+                  Text("Gender: "),
+                  Radio<String>(
+                    value: 'Male',
+                    groupValue: gender,
+                    onChanged: (value) => setState(() => gender = value!),
+                  ),
+                  Text("Male"),
+                  Radio<String>(
+                    value: 'Female',
+                    groupValue: gender,
+                    onChanged: (value) => setState(() => gender = value!),
+                  ),
+                  Text("Female"),
+                ],
+              ),
+              ListTile(
+                title: Text(dob == null
+                    ? "Date of Birth"
+                    : "DOB: ${dob!.day}/${dob!.month}/${dob!.year}"),
+                trailing: Icon(Icons.calendar_today),
+                onTap: () async {
+                  final picked = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime(2000),
+                    firstDate: DateTime(1900),
+                    lastDate: DateTime.now(),
+                  );
+                  if (picked != null) {
+                    setState(() {
+                      dob = picked;
+                    });
+                  }
+                },
+              ),
+              TextFormField(
+                decoration: InputDecoration(labelText: "Address"),
+                onSaved: (val) => address = val ?? '',
+              ),
+              DropdownButtonFormField<String>(
+                value: city,
+                decoration: InputDecoration(labelText: "City"),
+                onChanged: (val) => setState(() => city = val!),
+                items: cities
+                    .map((c) => DropdownMenuItem(value: c, child: Text(c)))
+                    .toList(),
+              ),
+              TextFormField(
+                decoration: InputDecoration(labelText: "Pin Code"),
+                keyboardType: TextInputType.number,
+                onSaved: (val) => pinCode = val ?? '',
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                child: Text("Submit"),
+                onPressed: () {
+                  _formKey.currentState!.save();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => DetailsScreen(
+                        name: name,
+                        gender: gender,
+                        dob: dob,
+                        address: address,
+                        city: city,
+                        pinCode: pinCode,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class DetailsScreen extends StatelessWidget {
+  final String name, gender, address, city, pinCode;
+  final DateTime? dob;
+
+  DetailsScreen({
+    required this.name,
+    required this.gender,
+    required this.dob,
+    required this.address,
+    required this.city,
+    required this.pinCode,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("All Details")),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            Text("Name: $name"),
+            Text("Gender: $gender"),
+            Text("DOB: ${dob?.day}/${dob?.month}/${dob?.year}"),
+            Text("Address: $address"),
+            Text("City: $city"),
+            Text("Pin Code: $pinCode"),
+            SizedBox(height: 20),
+            ElevatedButton(
+              child: Text("BACK"),
+              onPressed: () => Navigator.pop(context),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+```
+
+---
+
+Would you like the code for validation or saving data locally as well?

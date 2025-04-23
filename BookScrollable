@@ -1,0 +1,123 @@
+import 'package:flutter/material.dart';
+
+void main() => runApp(const MyApp());
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Book List',
+      home: const BookListScreen(),
+      debugShowCheckedModeBanner: false,
+    );
+  }
+}
+
+class Book {
+  final String imageAsset;
+  final String name;
+  final String author;
+  final String price;
+
+  const Book({
+    required this.imageAsset,
+    required this.name,
+    required this.author,
+    required this.price,
+  });
+}
+
+class BookListScreen extends StatelessWidget {
+  const BookListScreen({super.key});
+
+  final List<Book> books = const [
+    Book(
+      imageAsset: 'assets/images/book_cover.jpeg',
+      name: 'Book 1',
+      author: 'Author A',
+      price: '\$10',
+    ),
+    Book(
+      imageAsset: 'assets/images/book_cover2.jpeg',
+      name: 'Book 2',
+      author: 'Author B',
+      price: '\$12',
+    ),
+    Book(
+      imageAsset: 'assets/images/book_cover.jpeg',
+      name: 'Book 3',
+      author: 'Author C',
+      price: '\$8',
+    ),
+    Book(
+      imageAsset: 'assets/images/book_cover2.jpeg',
+      name: 'Book 4',
+      author: 'Author D',
+      price: '\$15',
+    ),
+    Book(
+      imageAsset: 'assets/images/book_cover.jpeg',
+      name: 'Book 5',
+      author: 'Author E',
+      price: '\$11',
+    ),
+    Book(
+      imageAsset: 'assets/images/book_cover2.jpeg',
+      name: 'Book 6',
+      author: 'Author F',
+      price: '\$9',
+    ),
+    Book(
+      imageAsset: 'assets/images/book_cover.jpeg',
+      name: 'Book 7',
+      author: 'Author G',
+      price: '\$14',
+    ),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text("Book details")),
+      body: ListView.builder(
+        padding: const EdgeInsets.all(16),
+        itemCount: books.length,
+        itemBuilder: (context, index) {
+          final book = books[index];
+          return Card(
+            margin: const EdgeInsets.only(bottom: 16),
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: Row(
+                children: [
+                  Image.network(
+                    book.imageAsset,
+                    width: 100,
+                    height: 100,
+                    fit: BoxFit.cover,
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Book Name: ${book.name}",
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        Text("Author: ${book.author}"),
+                        Text("Price: ${book.price}"),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}

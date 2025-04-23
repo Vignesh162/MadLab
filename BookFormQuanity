@@ -1,0 +1,146 @@
+Create a flutter app to demonstrate the following:
+A. Quantity Validation: should not accept negative numbers
+B. Price validation should not accept negative numbers
+C. The author and book name field should only accept characters from ‘A’ to ‘Z’ or ‘a’ to ‘z’.
+Create a flutter app to demonstrate the following:
+A. Quantity Validation: should not accept negative numbers
+B. Price validation should not accept negative numbers
+C. The author and book name field should only accept characters from ‘A’ to ‘Z’ or ‘a’ to ‘z’.
+
+import 'package:flutter/material.dart';
+
+void main() => runApp(const MyApp());
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Book Form',
+      home: const BookForm(),
+      debugShowCheckedModeBanner: false,
+    );
+  }
+}
+
+class BookForm extends StatefulWidget {
+  const BookForm({super.key});
+
+  @override
+  State<BookForm> createState() => _BookFormState();
+}
+
+class _BookFormState extends State<BookForm> {
+  final _formKey = GlobalKey<FormState>();
+  final _bookNameController = TextEditingController();
+  final _authorController = TextEditingController();
+  final _priceController = TextEditingController();
+  final _quantityController = TextEditingController();
+
+  void _submitForm() {
+    if (_formKey.currentState!.validate()) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Book submitted successfully!'),
+          backgroundColor: Colors.green,
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please fix the errors in the form.'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
+  String? _validateTextOnly(String? value, String fieldName) {
+    if (value == null || value.isEmpty) {
+      return '$fieldName is required';
+    } else if (!RegExp(r'^[a-zA-Z\s]+$').hasMatch(value)) {
+      return '$fieldName must contain only letters';
+    }
+    return null;
+  }
+
+  String? _validatePositiveNumber(String? value, String fieldName) {
+    if (value == null || value.isEmpty) {
+      return '$fieldName is required';
+    }
+    final number = double.tryParse(value);
+    if (number == null || number < 0) {
+      return '$fieldName must be a positive number';
+    }
+    return null;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text("Book details")),
+      body: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              // Book Name
+              TextFormField(
+                controller: _bookNameController,
+                decoration: const InputDecoration(
+                  labelText: "Book Name",
+                  border: OutlineInputBorder(),
+                ),
+                validator: (value) => _validateTextOnly(value, "Book Name"),
+              ),
+              const SizedBox(height: 15),
+
+              // Author
+              TextFormField(
+                controller: _authorController,
+                decoration: const InputDecoration(
+                  labelText: "Author",
+                  border: OutlineInputBorder(),
+                ),
+                validator: (value) => _validateTextOnly(value, "Author"),
+              ),
+              const SizedBox(height: 15),
+
+              // Price
+              TextFormField(
+                controller: _priceController,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(
+                  labelText: "Price",
+                  border: OutlineInputBorder(),
+                ),
+                validator: (value) => _validatePositiveNumber(value, "Price"),
+              ),
+              const SizedBox(height: 15),
+
+              // Quantity
+              TextFormField(
+                controller: _quantityController,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(
+                  labelText: "Quantity",
+                  border: OutlineInputBorder(),
+                ),
+                validator:
+                    (value) => _validatePositiveNumber(value, "Quantity"),
+              ),
+              const SizedBox(height: 25),
+
+              ElevatedButton(
+                onPressed: _submitForm,
+                child: const Text("Submit"),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

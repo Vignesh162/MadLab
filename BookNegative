@@ -1,0 +1,156 @@
+Create a flutter app to demonstrate the following:
+A. Mark text box should not accept negative numbers
+B. Name and subject field should only accept characters from ‘A’ to ‘Z’ or ‘a’ to ‘z’.
+
+import 'package:flutter/material.dart';
+
+void main() => runApp(const MyApp());
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Book Entry Form',
+      home: const BookForm(),
+      debugShowCheckedModeBanner: false,
+    );
+  }
+}
+
+class BookForm extends StatefulWidget {
+  const BookForm({super.key});
+
+  @override
+  State<BookForm> createState() => _BookFormState();
+}
+
+class _BookFormState extends State<BookForm> {
+  final _formKey = GlobalKey<FormState>();
+  final _nameController = TextEditingController();
+  final _subjectController = TextEditingController();
+  final _marksController = TextEditingController();
+  String? _category;
+
+  void _submitForm() {
+    if (_formKey.currentState!.validate() && _category != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Form submitted successfully!"),
+          backgroundColor: Colors.green,
+        ),
+      );
+    } else if (_category == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Please select a category."),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
+  String? _validateAlphabetic(String? value, String fieldName) {
+    if (value == null || value.trim().isEmpty) {
+      return '$fieldName is required';
+    } else if (!RegExp(r'^[a-zA-Z\s]+$').hasMatch(value)) {
+      return '$fieldName must contain only letters';
+    }
+    return null;
+  }
+
+  String? _validateNonNegative(String? value, String fieldName) {
+    if (value == null || value.trim().isEmpty) {
+      return '$fieldName is required';
+    }
+    final number = double.tryParse(value);
+    if (number == null || number < 0) {
+      return '$fieldName must be a non-negative number';
+    }
+    return null;
+  }
+
+  Widget _buildCategoryRadio(String title) {
+    return Row(
+      children: [
+        Radio<String>(
+          value: title,
+          groupValue: _category,
+          onChanged: (value) {
+            setState(() {
+              _category = value;
+            });
+          },
+        ),
+        Text(title),
+      ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text("Book details")),
+      body: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              // Name Field
+              TextFormField(
+                controller: _nameController,
+                decoration: const InputDecoration(
+                  labelText: "Name",
+                  border: OutlineInputBorder(),
+                ),
+                validator: (value) => _validateAlphabetic(value, "Name"),
+              ),
+              const SizedBox(height: 15),
+
+              // Subject Field
+              TextFormField(
+                controller: _subjectController,
+                decoration: const InputDecoration(
+                  labelText: "Subject",
+                  border: OutlineInputBorder(),
+                ),
+                validator: (value) => _validateAlphabetic(value, "Subject"),
+              ),
+              const SizedBox(height: 15),
+
+              // Category (Radio Buttons)
+              Row(
+                children: [
+                  const Text("Category: "),
+                  _buildCategoryRadio("TW"),
+                  _buildCategoryRadio("IA"),
+                  _buildCategoryRadio("Or"),
+                ],
+              ),
+              const SizedBox(height: 15),
+
+              // Marks Field
+              TextFormField(
+                controller: _marksController,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(
+                  labelText: "Marks",
+                  border: OutlineInputBorder(),
+                ),
+                validator: (value) => _validateNonNegative(value, "Marks"),
+              ),
+              const SizedBox(height: 20),
+
+              ElevatedButton(
+                onPressed: _submitForm,
+                child: const Text("Submit"),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

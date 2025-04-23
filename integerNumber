@@ -1,0 +1,76 @@
+Sure! Below is a complete **Dart program** that performs all the operations you listed:
+
+---
+
+### ✅ Dart Program for List Analysis
+
+```dart
+import 'dart:io';
+
+void main() {
+  // Accept input from user
+  print("Enter a list of integers separated by spaces:");
+  String? input = stdin.readLineSync();
+
+  if (input != null && input.isNotEmpty) {
+    List<int> numbers = input
+        .split(' ')
+        .map((e) => int.tryParse(e))
+        .where((e) => e != null)
+        .map((e) => e!)
+        .toList();
+
+    if (numbers.isEmpty) {
+      print("No valid integers entered.");
+      return;
+    }
+
+    print("\nYou entered: $numbers");
+    print("Total: ${getTotal(numbers)}");
+    print("Highest: ${getHighest(numbers)}");
+    print("Lowest: ${getLowest(numbers)}");
+    print("Average: ${getAverage(numbers)}");
+    print("Median: ${getMedian(numbers)}");
+  } else {
+    print("No input provided.");
+  }
+}
+
+// Total of all numbers
+int getTotal(List<int> list) => list.reduce((a, b) => a + b);
+
+// Highest number
+int getHighest(List<int> list) => list.reduce((a, b) => a > b ? a : b);
+
+// Lowest number
+int getLowest(List<int> list) => list.reduce((a, b) => a < b ? a : b);
+
+// Average
+double getAverage(List<int> list) => getTotal(list) / list.length;
+
+// Median
+double getMedian(List<int> list) {
+  List<int> sorted = List.from(list)..sort();
+  int n = sorted.length;
+  if (n % 2 == 1) {
+    return sorted[n ~/ 2].toDouble();
+  } else {
+    return (sorted[n ~/ 2 - 1] + sorted[n ~/ 2]) / 2.0;
+  }
+}
+```
+
+---
+
+### ▶️ How to Run:
+1. Save the code in a file like `list_analysis.dart`
+2. Run it in terminal with:
+```bash
+dart run list_analysis.dart
+```
+3. Input a list like:
+```
+12 45 67 89 23 34 10
+```
+
+Would you like the same functionality in a Flutter UI too?

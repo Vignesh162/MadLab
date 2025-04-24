@@ -2,10 +2,6 @@ Create a flutter app to demonstrate the following:
 A. Quantity Validation: should not accept negative numbers
 B. Price validation should not accept negative numbers
 C. The author and book name field should only accept characters from ‘A’ to ‘Z’ or ‘a’ to ‘z’.
-Create a flutter app to demonstrate the following:
-A. Quantity Validation: should not accept negative numbers
-B. Price validation should not accept negative numbers
-C. The author and book name field should only accept characters from ‘A’ to ‘Z’ or ‘a’ to ‘z’.
 
 import 'package:flutter/material.dart';
 
